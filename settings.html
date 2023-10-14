@@ -1,0 +1,221 @@
+
+<div class="sd_settings">
+    <div class="inline-drawer">
+        <div class="inline-drawer-toggle inline-drawer-header">
+            <b>ComfyUI</b>
+            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+        </div>
+        <div class="inline-drawer-content">
+            <small><i>Use slash commands or the bottom Paintbrush button to generate images. Type <span class="monospace">/help</span> in chat for more details</i></small>
+            <br>
+            <label for="comfy_refine_mode" class="checkbox_label" title="Allow to edit prompts manually before sending them to generation API">
+                <input id="comfy_refine_mode" type="checkbox" />
+                Edit prompts before generation
+            </label>
+            <label for="comfy_source">Source</label>
+            <select id="comfy_source">
+                <option value="comfy">ComfyUI (local)</option>
+            </select>
+            <div data-comfy-source="auto">
+                <label for="comfy_auto_url">SD Web UI URL</label>
+                <div class="flex-container flexnowrap">
+                    <input id="comfy_auto_url" type="text" class="text_pole" placeholder="Example: {{auto_url}}" value="{{auto_url}}" />
+                    <div id="comfy_auto_validate" class="menu_button menu_button_icon">
+                        <i class="fa-solid fa-check"></i>
+                        <span data-i18n="Connect">
+                            Connect
+                        </span>
+                    </div>
+                </div>
+                <label for="comfy_auto_auth">Authentication (optional)</label>
+                <input id="comfy_auto_auth" type="text" class="text_pole" placeholder="Example: username:password" value="" />
+                <i><b>Important:</b> run SD Web UI with the <tt>--api</tt> flag! The server must be accessible from the SillyTavern host machine.</i>
+            </div>
+            <div data-comfy-source="horde">
+                <i>Hint: Save an API key in Horde KoboldAI API settings to use it here.</i>
+                <label for="comfy_horde_nsfw" class="checkbox_label">
+                    <input id="comfy_horde_nsfw" type="checkbox" />
+                    <span data-i18n="Allow NSFW images from Horde">
+                        Allow NSFW images from Horde
+                    </span>
+                </label>
+                <label for="comfy_horde_karras" class="checkbox_label">
+                    <input id="comfy_horde_karras" type="checkbox" />
+                    <span data-i18n="Karras (not all samplers supported)">
+                        Karras (not all samplers supported)
+                    </span>
+                </label>
+            </div>
+            <div data-comfy-source="novel">
+                <div class="flex-container">
+                    <label for="comfy_novel_anlas_guard" class="checkbox_label flex1" title="Automatically adjust generation parameters to ensure free image generations.">
+                        <input id="comfy_novel_anlas_guard" type="checkbox" />
+                        <span data-i18n="Avoid spending Anlas">
+                            Avoid spending Anlas
+                        </span>
+                        <span data-i18n="Opus tier" class="toggle-description">(Opus tier)</span>
+                    </label>
+                    <div id="comfy_novel_view_anlas" class="menu_button menu_button_icon">
+                        View my Anlas
+                    </div>
+                </div>
+                <i>Hint: Save an API key in the NovelAI API settings to use it here.</i>
+            </div>
+            <div data-comfy-source="comfy">
+                <label for="comfy_comfy_url">ComfyUI URL</label>
+                <div class="flex-container flexnowrap">
+                    <input id="comfy_comfy_url" type="text" class="text_pole" placeholder="Example: {{auto_url}}" value="{{auto_url}}" />
+                    <div id="comfy_comfy_validate" class="menu_button menu_button_icon">
+                        <i class="fa-solid fa-check"></i>
+                        <span data-i18n="Connect">
+                            Connect
+                        </span>
+                    </div>
+                </div>
+                <i><b>Important:</b> run ComfyUI with the "<tt>--enable-cors-header http://127.0.0.1:8000</tt>" flag! The URL must be the SillyTavern URL. The server must be accessible from the SillyTavern host machine.</i>
+            </div>
+            <div data-comfy-source="comfy">
+                <label for="comfy_comfy_workflow">ComfyUI Workflow (JSON)</label>
+                <textarea id="comfy_comfy_workflow" class="text_pole textarea_compact" rows="3">{
+                    "3": {
+                        "class_type": "KSampler",
+                        "inputs": {
+                            "cfg": "%scale%",
+                            "denoise": 1,
+                            "latent_image": [
+                                "5",
+                                0
+                            ],
+                            "model": [
+                                "4",
+                                0
+                            ],
+                            "negative": [
+                                "7",
+                                0
+                            ],
+                            "positive": [
+                                "6",
+                                0
+                            ],
+                            "sampler_name": "euler",
+                            "scheduler": "normal",
+                            "seed": 8566257,
+                            "steps": "%steps%"
+                        }
+                    },
+                    "4": {
+                        "class_type": "CheckpointLoaderSimple",
+                        "inputs": {
+                            "ckpt_name": "astreapixieRadiance_v16.safetensors"
+                        }
+                    },
+                    "5": {
+                        "class_type": "EmptyLatentImage",
+                        "inputs": {
+                            "batch_size": 1,
+                            "height": "%height%",
+                            "width": "%width%"
+                        }
+                    },
+                    "6": {
+                        "class_type": "CLIPTextEncode",
+                        "inputs": {
+                            "clip": [
+                                "4",
+                                1
+                            ],
+                            "text": "%prompt%"
+                        }
+                    },
+                    "7": {
+                        "class_type": "CLIPTextEncode",
+                        "inputs": {
+                            "clip": [
+                                "4",
+                                1
+                            ],
+                            "text": "%negative_prompt%"
+                        }
+                    },
+                    "8": {
+                        "class_type": "VAEDecode",
+                        "inputs": {
+                            "samples": [
+                                "3",
+                                0
+                            ],
+                            "vae": [
+                                "4",
+                                2
+                            ]
+                        }
+                    },
+                    "9": {
+                        "class_type": "SaveImage",
+                        "inputs": {
+                            "filename_prefix": "SillyTavern",
+                            "images": [
+                                "8",
+                                0
+                            ]
+                        }
+                    }
+                }</textarea>
+            </div>
+            <label for="comfy_scale">CFG Scale (<span id="comfy_scale_value"></span>)</label>
+            <input id="comfy_scale" type="range" min="{{scale_min}}" max="{{scale_max}}" step="{{scale_step}}" value="{{scale}}" />
+            <label for="comfy_steps">Sampling steps (<span id="comfy_steps_value"></span>)</label>
+            <input id="comfy_steps" type="range" min="{{steps_min}}" max="{{steps_max}}" step="{{steps_step}}" value="{{steps}}" />
+            <label for="comfy_width">Width (<span id="comfy_width_value"></span>)</label>
+            <input id="comfy_width" type="range" max="{{dimension_max}}" min="{{dimension_min}}" step="{{dimension_step}}" value="{{width}}" />
+            <label for="comfy_height">Height (<span id="comfy_height_value"></span>)</label>
+            <input id="comfy_height" type="range" max="{{dimension_max}}" min="{{dimension_min}}" step="{{dimension_step}}" value="{{height}}" />
+            <label for="comfy_model">Stable Diffusion model</label>
+            <select id="comfy_model"></select>
+            <label for="comfy_sampler">Sampling method</label>
+            <select id="comfy_sampler"></select>
+            <div class="flex-container marginTop10 margin-bot-10px">
+                <label class="flex1 checkbox_label">
+                    <input id="comfy_restore_faces" type="checkbox" />
+                    Restore Faces
+                </label>
+                <label class="flex1 checkbox_label">
+                    <input id="comfy_enable_hr" type="checkbox" />
+                    Hires. Fix
+                </label>
+            </div>
+            <div data-comfy-source="auto">
+                <label for="comfy_hr_upscaler">Upscaler</label>
+                <select id="comfy_hr_upscaler"></select>
+                <label for="comfy_hr_scale">Upscale by (<span id="comfy_hr_scale_value"></span>)</label>
+                <input id="comfy_hr_scale" type="range" min="{{hr_scale_min}}" max="{{hr_scale_max}}" step="{{hr_scale_step}}" value="{{hr_scale}}" />
+                <label for="comfy_denoising_strength">Denoising strength (<span id="comfy_denoising_strength_value"></span>)</label>
+                <input id="comfy_denoising_strength" type="range" min="{{denoising_strength_min}}" max="{{denoising_strength_max}}" step="{{denoising_strength_step}}" value="{{denoising_strength}}" />
+                <label for="comfy_hr_second_pass_steps">Hires steps (2nd pass) (<span id="comfy_hr_second_pass_steps_value"></span>)</label>
+                <input id="comfy_hr_second_pass_steps" type="range" min="{{hr_second_pass_steps_min}}" max="{{hr_second_pass_steps_max}}" step="{{hr_second_pass_steps_max}}" value="{{hr_second_pass_steps}}" />
+            </div>
+            <div data-comfy-source="novel">
+                <label for="comfy_novel_upscale_ratio">Upscale by (<span id="comfy_novel_upscale_ratio_value"></span>)</label>
+                <input id="comfy_novel_upscale_ratio" type="range" min="{{novel_upscale_ratio_min}}" max="{{novel_upscale_ratio_max}}" step="{{novel_upscale_ratio_step}}" value="{{novel_upscale_ratio}}" />
+            </div>
+            <label for="comfy_prompt_prefix">Common prompt prefix</label>
+            <textarea id="comfy_prompt_prefix" class="text_pole textarea_compact" rows="3"></textarea>
+            <div id="comfy_character_prompt_block">
+                <label for="comfy_character_prompt">Character-specific prompt prefix</label>
+                <small>Won't be used in groups.</small>
+                <textarea id="comfy_character_prompt" class="text_pole textarea_compact" rows="3" placeholder="Any characteristics that describe the currently selected character. Will be added after a common prefix.&#10;Example: female, green eyes, brown hair, pink shirt"></textarea>
+            </div>
+            <label for="comfy_negative_prompt">Negative prompt</label>
+            <textarea id="comfy_negative_prompt" class="text_pole textarea_compact" rows="3"></textarea>
+        </div>
+    </div>
+    <div class="inline-drawer">
+        <div class="inline-drawer-toggle inline-drawer-header">
+            <b>ComfyUI Prompt Templates</b>
+            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+        </div>
+        <div id="comfy_prompt_templates" class="inline-drawer-content">
+        </div>
+    </div>
+</div>
