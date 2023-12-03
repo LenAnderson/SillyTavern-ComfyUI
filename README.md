@@ -1,4 +1,8 @@
-# SillyTavern - ComfyUI Extension
+# ~SillyTavern - ComfyUI Extension~
+
+# This extension is obsolete as ComfyUI is now natively supported by Silly Tavern
+
+---
 
 Generate background images, character images etc. using ComfyUI.
 
